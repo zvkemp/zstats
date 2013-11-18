@@ -1,4 +1,4 @@
-# Zstats
+# ZStats
 
 TODO: Write a gem description
 

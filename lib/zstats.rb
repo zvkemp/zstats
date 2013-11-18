@@ -1,5 +1,5 @@
 require "zstats/version"
 
-module Zstats
+module ZStats
   # Your code goes here...
 end
