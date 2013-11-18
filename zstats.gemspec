@@ -5,7 +5,7 @@ require 'zstats/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "zstats"
-  spec.version       = Zstats::VERSION
+  spec.version       = ZStats::VERSION
   spec.authors       = ["zvkemp"]
   spec.email         = ["zvkemp@gmail.com"]
   spec.description   = %q{Simple statistics}
