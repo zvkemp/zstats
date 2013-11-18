@@ -1,5 +1,7 @@
 require "zstats/version"
 
 module ZStats
-  # Your code goes here...
+  require "zstats/dataset"
+  require "zstats/metadata"
+  require "zstats/vector"
 end
