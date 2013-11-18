@@ -135,14 +135,6 @@ describe ZStats::Vector do
       vector.median.must_equal 3.0
     end
 
-    it "returns a standard deviation (population)" do
-      vector.standard_deviation.must_be_within_delta 1.448, 0.001
-    end
-
-    it "returns a standard deviation (sample)" do
-      vector.standard_deviation(:sample).must_be_within_delta 1.45, 0.001
-    end
-
     it "returns a min" do
       vector.min.must_equal 1
     end
@@ -151,24 +143,36 @@ describe ZStats::Vector do
       vector.max.must_equal 5
     end
 
-    it "returns the population variance" do
-      vector.variance.must_be_within_delta 2.09, 0.01
+    describe "standard deviation" do
+      it "returns a standard deviation (population)" do
+        vector.standard_deviation.must_be_within_delta 1.448, 0.001
+      end
+
+      it "returns a standard deviation (sample)" do
+        vector.standard_deviation(:sample).must_be_within_delta 1.45, 0.001
+      end
+
+      it "returns the population variance" do
+        vector.variance.must_be_within_delta 2.09, 0.01
+      end
+
+      it "returns the sample variance" do
+        vector.variance(:sample).must_be_within_delta 2.10, 0.01
+      end
     end
 
-    it "returns the sample variance" do
-      vector.variance(:sample).must_be_within_delta 2.10, 0.01
-    end
+    describe "tables" do
+      it "returns a table" do
+        vector.table.must_be_instance_of Hash
+        vector.table.keys.uniq.sort.must_equal [1,2,3,4,5]
+        vector.table.values.uniq.sort.must_equal [115, 134, 137, 145, 149]
+      end
 
-    it "returns a table" do
-      vector.table.must_be_instance_of Hash
-      vector.table.keys.uniq.sort.must_equal [1,2,3,4,5]
-      vector.table.values.uniq.sort.must_equal [115, 134, 137, 145, 149]
-    end
-
-    it "returns a proportion table" do
-      vector.proportion_table.must_be_instance_of Hash
-      # vector.proportion_table.values.uniq.sort.must_equal [0.01, 0.02]
-      vector.proportion_table.values.inject(:+).must_be_within_delta 1, 0.000001
+      it "returns a proportion table" do
+        vector.proportion_table.must_be_instance_of Hash
+        # vector.proportion_table.values.uniq.sort.must_equal [0.01, 0.02]
+        vector.proportion_table.values.inject(:+).must_be_within_delta 1, 0.000001
+      end
     end
   end
 end
