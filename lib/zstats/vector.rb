@@ -33,15 +33,34 @@ module ZStats
       Math.sqrt(variance(variance_method))
     end
 
+    def table
+      @table ||= calculate_table
+    end
+
+    def proportion_table
+      @proportion_table ||= calculate_proportion_table
+    end
+
     def size
       @size ||= base_vector.size
     end
     alias_method :count, :size
 
     private
+
+      def calculate_table
+        Hash[to_a.group_by {|x| x }.map {|k,v| [k, v.count] }]
+      end
+
+      def calculate_proportion_table
+        Hash[table.map {|k,v| [k, v.to_f/size]}]
+      end
+
+
       def calculate_median
         (sorted_array[(size - 1)/2] + sorted_array[size/2])/2.0
       end
+
 
       def population_variance
         @population_variance ||= calculate_population_variance
@@ -59,6 +78,7 @@ module ZStats
       def sample_variance_mean
         sum / (count.to_f - 1)
       end
+
 
       def sum
         @sum ||= to_a.inject(:+)
