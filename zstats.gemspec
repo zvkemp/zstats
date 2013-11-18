@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Zstats::VERSION
   spec.authors       = ["zvkemp"]
   spec.email         = ["zvkemp@gmail.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{Simple statistics}
+  spec.summary       = %q{Simple statistics}
   spec.homepage      = ""
   spec.license       = "MIT"
 
