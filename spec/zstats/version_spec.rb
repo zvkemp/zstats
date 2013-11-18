@@ -1,4 +1,4 @@
-require_relative '../../spec_helper'
+require_relative '../spec_helper'
 
 describe ZStats::VERSION do
   it 'exists' do
