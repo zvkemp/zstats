@@ -41,12 +41,30 @@ module ZStats
       @proportion_table ||= calculate_proportion_table
     end
 
+    def percentage_table(digits = 1)
+      Hash[proportion_table.map {|k,v| [k, (v * 100).round(digits)] }]
+    end
+
     def size
       @size ||= base_vector.size
     end
     alias_method :count, :size
 
+    def normalize(options = {})
+      lmin = options.fetch(:min){ min }
+      lmax = options.fetch(:max){ max }
+
+      to_a.map {|x| ((x.to_f - lmin) / (lmax - lmin)) }
+    end
+
+    def scale # z-score
+      @scaled ||= to_a.map(&method(:z_score))
+    end
+
     private
+      def z_score(x)
+        (x - mean) / standard_deviation
+      end
 
       def calculate_table
         Hash[to_a.group_by {|x| x }.map {|k,v| [k, v.count] }]

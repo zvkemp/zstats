@@ -78,6 +78,44 @@ describe ZStats::Vector do
       vector.proportion_table.values.uniq.sort.must_equal [0.01, 0.02]
       vector.proportion_table.values.inject(:+).must_be_within_delta 1, 0.000001
     end
+
+    describe "scaling" do
+      let(:v_index)   {->(n){ vector.to_a.index(n) }}
+      let(:max_index) { v_index.(vector.max) }
+      let(:min_index) { v_index.(vector.min) }
+
+      it "normalizes based on present min max values" do
+        n = vector.normalize
+        n[max_index].must_equal 1.0
+        n[min_index].must_equal 0.0
+      end
+
+      it "normalizes based on user-specified minimum" do
+        n = vector.normalize(min: 0)
+        n[max_index].must_equal 1.0
+        n[min_index].must_be_within_delta 0.0053, 0.0001
+      end
+
+      it "normalizes based on user-specified maximum" do
+        n = vector.normalize(max: 100000)
+        n[max_index].must_be_within_delta 0.497, 0.001
+        n[min_index].must_equal 0.0
+      end
+
+      it "normalizes based on user-specified min max" do
+        n = vector.normalize(min: 0, max: 100000)
+        n[max_index].must_equal 0.49795
+        n[min_index].must_equal 0.00265
+      end
+
+      it "computes the z-scores" do
+        z = vector.scale
+        z[max_index].must_be_within_delta 1.65, 0.01
+        z[min_index].must_be_within_delta -1.70, 0.01
+        z[max_index].must_equal z.max
+        z[min_index].must_equal z.min
+      end
+    end
   end
 
   describe "categorical data" do
@@ -172,6 +210,11 @@ describe ZStats::Vector do
         vector.proportion_table.must_be_instance_of Hash
         # vector.proportion_table.values.uniq.sort.must_equal [0.01, 0.02]
         vector.proportion_table.values.inject(:+).must_be_within_delta 1, 0.000001
+      end
+
+      it "returns a percentage table" do
+        vector.percentage_table.must_be_instance_of Hash
+        vector.percentage_table.values.inject(:+).must_be_within_delta 100, 0.1
       end
     end
   end
